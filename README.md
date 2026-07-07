@@ -1,60 +1,213 @@
-# Taxi service user form and validation
+# Taxi Service User Form and Validation
 
-Read [the guideline](https://github.com/mate-academy/py-task-guideline/blob/main/README.md) before starting.
-- Make sure that you change the settings for [html-files](https://github.com/mate-academy/py-task-guideline/blob/main/html_settings/README.MD).
-- Use the following command to load prepared data from fixture to test and debug your code:
-  
-`python manage.py loaddata taxi_service_db_data.json`
+## Descrição
 
-- After loading data from fixture you can use following superuser (or create another one by yourself):
-  - Login: `admin.user`
-  - Password: `1qazcde3`
+O **Taxi Service User Form and Validation** é uma aplicação web desenvolvida com **Django** para praticar formulários de usuário, validações personalizadas e relacionamentos entre motoristas e carros.
 
-Feel free to add more data using admin panel, if needed.
+O sistema simula uma plataforma de gerenciamento de serviço de táxi, permitindo administrar motoristas, carros e fabricantes. Esta versão tem como foco a criação de motoristas, validação do número da licença e associação ou remoção do usuário logado em um carro.
 
-In this task, you will implement a custom form and django built-in forms to create,
-update or delete content from the site.
+## Funcionalidades
 
-1. Implement:
-    - `Create`, `Delete` views for `Driver`, 
-2. On the driver list page create a button that leads to the driver creation page.
-3. Create a driver's license update page. The form - `DriverLicenseUpdateForm`
-on this page must check that license:
-    - Consist only of 8 characters
-    - First 3 characters are uppercase letters
-    - Last 5 characters are digits
-    
-    Also, don't forget to validate the license number on user creation as well.
-4. On the driver detail page add buttons that lead to the driver's license updating page and
-driver deletion page.
-5. On car creation page switch to checkboxes widget for assigning drivers to car.
-6. On the car detail page add button `Assign me to this car`. This button adds 
-current user to car drivers. When current user is already a driver of this car, 
-there should be `Delete me from this car` button that deletes user from car drivers.
+- Listagem de motoristas, carros e fabricantes;
+- Visualização de detalhes de carros e motoristas;
+- Criação e exclusão de motoristas;
+- Atualização do número da licença do motorista;
+- Validação personalizada do formato da licença;
+- Associação do usuário logado a um carro;
+- Remoção do usuário logado de um carro;
+- Uso de checkboxes para atribuir motoristas a carros;
+- Proteção de páginas com autenticação;
+- Uso de formulários e Class-Based Views.
 
-The car detail page should look like this:
-![image](https://mate-academy-images.s3.eu-central-1.amazonaws.com/django-forms-1.png)
-![image](https://mate-academy-images.s3.eu-central-1.amazonaws.com/django-forms-2.png)
+## Tecnologias utilizadas
 
-NOTE: Attach screenshots of all created or modified pages to pull request. It's important to attach images not links to them.
+- Python
+- Django
+- SQLite
+- HTML
+- CSS
+- Django Templates
+- Django Crispy Forms
+- Git
+- GitHub
 
-### Note: Check your code using this [checklist](checklist.md) before pushing your solution.
+## Estrutura do projeto
 
-# Note
-Follow these steps if you need to use `crispy_forms` v2.0 with Python 3.11:
-
-1. Add `CRISPY_TEMPLATE_PACK` to `settings.py`.
-
-```python
-CRISPY_TEMPLATE_PACK="bootstrap4"
+```text
+py-taxi-service-user-form-and-validation/
+├── taxi/
+│   ├── migrations/
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── urls.py
+│   └── views.py
+├── taxi_service/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+├── templates/
+├── static/
+├── tests/
+├── manage.py
+├── requirements.txt
+├── taxi_service_db_data.json
+└── README.md
 ```
 
-2. Add these apps to `INSTALLED_APPS` and install them corresponding to the `CRISPY_TEMPLATE_PACK` bootstrap version.
+## Modelos principais
 
-```python
-INSTALLED APPS = [
-   ...,
-   "crispy_bootstrap4",
-   "crispy_forms",
-]
+### Manufacturer
+
+Representa uma fabricante de carros.
+
+Principais campos:
+
+- `name`: nome da fabricante;
+- `country`: país de origem.
+
+### Driver
+
+Representa um motorista do serviço de táxi.
+
+Principais campos:
+
+- `username`: nome de usuário;
+- `first_name`: primeiro nome;
+- `last_name`: sobrenome;
+- `license_number`: número da licença.
+
+### Car
+
+Representa um carro utilizado no serviço de táxi.
+
+Principais campos:
+
+- `model`: modelo do carro;
+- `manufacturer`: fabricante do carro;
+- `drivers`: motoristas associados ao carro.
+
+## Validação da licença do motorista
+
+O número da licença do motorista deve seguir um formato específico:
+
+```text
+AAA12345
 ```
+
+Regras de validação:
+
+- Deve conter exatamente 8 caracteres;
+- Os 3 primeiros caracteres devem ser letras maiúsculas;
+- Os 5 últimos caracteres devem ser números.
+
+Exemplos:
+
+```text
+Válido: ABC12345
+Inválido: abC12345
+Inválido: ABC1234
+Inválido: ABC12A45
+```
+
+## Associação entre motorista e carro
+
+O projeto possui uma funcionalidade que permite ao usuário logado se associar a um carro.
+
+Na página de detalhes do carro:
+
+- Se o usuário ainda não estiver associado ao carro, será exibida uma opção para adicionar esse usuário ao carro;
+- Se o usuário já estiver associado ao carro, será exibida uma opção para removê-lo.
+
+Essa funcionalidade permite praticar relacionamentos muitos-para-muitos no Django.
+
+## O que foi praticado
+
+Este projeto permitiu praticar:
+
+- Validação personalizada em formulários;
+- Criação de usuários com campos adicionais;
+- Atualização de campos específicos de um model;
+- Relacionamentos muitos-para-muitos;
+- Criação de ações personalizadas em views;
+- Proteção de páginas com autenticação;
+- Uso de Class-Based Views;
+- Uso de checkboxes em formulários.
+
+## Como executar o projeto
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/WalterMatheusgg/py-taxi-service-user-form-and-validation.git
+```
+
+### 2. Acesse a pasta do projeto
+
+```bash
+cd py-taxi-service-user-form-and-validation
+```
+
+### 3. Crie um ambiente virtual
+
+```bash
+python -m venv venv
+```
+
+### 4. Ative o ambiente virtual
+
+No Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+No Linux/macOS:
+
+```bash
+source venv/bin/activate
+```
+
+### 5. Instale as dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+### 6. Execute as migrações
+
+```bash
+python manage.py migrate
+```
+
+### 7. Carregue os dados iniciais
+
+```bash
+python manage.py loaddata taxi_service_db_data.json
+```
+
+### 8. Inicie o servidor
+
+```bash
+python manage.py runserver
+```
+
+Depois, acesse no navegador:
+
+```text
+http://127.0.0.1:8000/
+```
+
+## Usuário padrão
+
+Após carregar os dados iniciais, é possível acessar com:
+
+```text
+Username: admin.user
+Password: 1qazcde3
+```
+
+## Autor
+
+Desenvolvido por **Walter Matheus** como parte da trilha de estudos em Django.
